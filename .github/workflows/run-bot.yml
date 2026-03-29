@@ -1,8 +1,6 @@
 name: Run Telegram Bot
 on:
-  schedule:
-    - cron: '0 */6 * * *' # Перезапуск каждые 6 часов, чтобы не спал
-  workflow_dispatch:      # Позволяет запустить вручную кнопкой
+  workflow_dispatch:      # Запуск кнопкой
 
 jobs:
   run-bot:
@@ -20,5 +18,6 @@ jobs:
         run: npm install
 
       - name: Run Bot
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }} # ЭТО САМАЯ ВАЖНАЯ СТРОЧКА
         run: node index.js
-        timeout-minutes: 350 # Максимальное время работы одного захода
