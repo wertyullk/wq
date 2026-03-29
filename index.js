@@ -1,35 +1,34 @@
-﻿const { Bot, InlineKeyboard } = require('grammy');
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-const crypto = require('crypto');
-const http = require('http');
+const { Bot } = require("grammy");
 
-const TOKEN = '';
-const bot = new Bot(process.env.BOT_TOKEN);
+// Проверка наличия токена
+const token = process.env.BOT_TOKEN;
+if (!token) {
+  console.error("❌ ОШИБКА: Токен не найден! Проверь Secrets на GitHub.");
+  process.exit(1);
+}
 
-const db = new sqlite3.Database(path.join(__dirname, 'nexus.db'));
-db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, trial_used INTEGER DEFAULT 0)');
+const bot = new Bot(token);
 
-bot.on("message", async (ctx) => {
-    const kb = new InlineKeyboard()
-        .text("🎁 ПОЛУЧИТЬ ТРИАЛ", "trial").row()
-        .text("🔑 МОЙ КЛЮЧ", "get_key");
-    
-    await ctx.reply("🌌 **NEXUS VPN GLOBAL**\nРаботает 24/7", {
-        parse_mode: "Markdown",
-        reply_markup: kb
+// Пример простой команды
+bot.command("start", (ctx) => ctx.reply("🚀 Бот успешно запущен через GitHub Actions!"));
+
+// Обработка ошибок, чтобы бот не вылетал
+bot.catch((err) => {
+  console.error("⚠️ Ошибка в работе бота:", err);
+});
+
+async function startup() {
+  console.log("⏳ Подключение к Telegram...");
+  try {
+    // drop_pending_updates: true помогает избежать ошибки 404/конфликтов вебхуков
+    await bot.start({
+      drop_pending_updates: true,
+      onStart: (info) => console.log(`✅ БОТ ЗАПУЩЕН! Имя: @${info.username}`),
     });
-});
+  } catch (error) {
+    console.error("❌ КРИТИЧЕСКАЯ ОШИБКА:", error.message);
+    process.exit(1);
+  }
+}
 
-bot.callbackQuery("get_key", async (ctx) => {
-    const uuid = crypto.randomUUID();
-    const key = "vless://" + uuid + "@91.211.88.1:443?security=reality&sni=google.com&fp=chrome&type=grpc#Nexus_" + ctx.from.id;
-    await ctx.reply("✅ Твой ключ:\n\n" + key + "", { parse_mode: "Markdown" });
-    await ctx.answerCallbackQuery();
-});
-
-// Заглушка для порта Hugging Face (обязательно!)
-http.createServer((req, res) => { res.write('Bot is running!'); res.end(); }).listen(7860);
-
-bot.start();
-console.log("Бот запущен!");
+startup();
