@@ -1,0 +1,7 @@
+﻿{
+  "name": "nexus-vpn-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" },
+  "dependencies": { "grammy": "^1.20.0", "sqlite3": "^5.1.7" }
+}
