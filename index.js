@@ -4,7 +4,7 @@ const path = require('path');
 const crypto = require('crypto');
 const http = require('http');
 
-const TOKEN = '8711071759:AAHeArkGsEmkLqyHoN8oqzcWDRdkTeuN2u4';
+const TOKEN = '';
 const bot = new Bot(TOKEN);
 
 const db = new sqlite3.Database(path.join(__dirname, 'nexus.db'));
