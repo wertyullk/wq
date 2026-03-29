@@ -1,0 +1,24 @@
+name: Run Telegram Bot
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Перезапуск каждые 6 часов, чтобы не спал
+  workflow_dispatch:      # Позволяет запустить вручную кнопкой
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Bot
+        run: node index.js
+        timeout-minutes: 350 # Максимальное время работы одного захода
