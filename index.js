@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const http = require('http');
 
 const TOKEN = '';
-const bot = new Bot("TOKEN");
+const bot = new Bot(process.env.BOT_TOKEN);
 
 const db = new sqlite3.Database(path.join(__dirname, 'nexus.db'));
 db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, trial_used INTEGER DEFAULT 0)');
