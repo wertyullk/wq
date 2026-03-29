@@ -1,23 +1,23 @@
-name: Run Telegram Bot
+name: Telegram Bot Runner
 on:
-  workflow_dispatch:      # Запуск кнопкой
+  workflow_dispatch: # Запуск кнопкой вручную
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Copy Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
       - name: Run Bot
         env:
-          BOT_TOKEN: ${{ secrets.BOT_TOKEN }} # ЭТО САМАЯ ВАЖНАЯ СТРОЧКА
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         run: node index.js
